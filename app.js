@@ -1,11 +1,19 @@
 var myApp = angular.module('myApp',[]);
 
-myApp.controller('TimerController', ['$scope', function($scope) {
+myApp.constant('YT_event', {
+  STOP:            0,
+  PLAY:            1,
+  PAUSE:           2,
+  STATUS_CHANGE:   3
+});
+
+myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_event) {
   // Defines which view to show
   $scope.startScreenBoolean = true;
   // Youtube variables
   $scope.ytLink = "";
   $scope.ytEmbedLink = "";
+  $scope.YT_event = YT_event;
   // Timer variables
   $scope.hours = 0;
   $scope.minutes = 0;
@@ -38,6 +46,16 @@ myApp.controller('TimerController', ['$scope', function($scope) {
     $scope.ytEmbedLink = $scope.ytLink.substr("https://www.youtube.com/watch?v=".length);
   });
 
+  $scope.sendControlEvent = function (ctrlEvent) {
+    this.$broadcast(ctrlEvent);
+  }
+
+  $scope.$on(YT_event.STATUS_CHANGE, function(event, data) {
+    if (data == "ENDED") {
+      $scope.resetTimer();
+    }
+  });
+
   // Timer functions
   // -----------------------------------------------------------------------------
 
@@ -60,7 +78,7 @@ myApp.controller('TimerController', ['$scope', function($scope) {
 
         if (--timer < 0) {
           clearInterval($scope.ticker);
-          // Then run the Youtube video
+          $scope.sendControlEvent(YT_event.PLAY)
         }
       }, 1000);
 
@@ -73,6 +91,11 @@ myApp.controller('TimerController', ['$scope', function($scope) {
   $scope.stopTimer = function() {
     clearInterval($scope.ticker);
     $scope.startScreenBoolean = true;
+  };
+
+  $scope.resetTimer = function() {
+    $scope.stopTimer();
+    $scope.startTimer();
   };
 
   $scope.setTicker = function() {
@@ -101,7 +124,7 @@ myApp.controller('TimerController', ['$scope', function($scope) {
   // -----------------------------------------------------------------------------
 }]);
 
-myApp.directive('youtube', function($window) {
+myApp.directive('youtube', function($window, YT_event) {
   return {
     restrict: "E",
 
@@ -138,6 +161,34 @@ myApp.directive('youtube', function($window) {
           height: scope.height,
           width: scope.width,
           videoId: scope.videoid,
+          events: {
+            'onStateChange': function(event) {
+
+              var message = {
+                event: YT_event.STATUS_CHANGE,
+                data: ""
+              };
+
+              switch(event.data) {
+                case YT.PlayerState.PLAYING:
+                  message.data = "PLAYING";
+                  break;
+                case YT.PlayerState.ENDED:
+                  message.data = "ENDED";
+                  break;
+                case YT.PlayerState.UNSTARTED:
+                  message.data = "NOT PLAYING";
+                  break;
+                case YT.PlayerState.PAUSED:
+                  message.data = "PAUSED";
+                  break;
+              };
+
+              scope.$apply(function() {
+                scope.$emit(message.event, message.data);
+              });
+            }
+          }
         });
       }
 
@@ -149,9 +200,11 @@ myApp.directive('youtube', function($window) {
         if (newValue == oldValue) {
           return;
         }
-
         player.setSize(scope.width, scope.height);
+      });
 
+      scope.$on(YT_event.PLAY, function () {
+        player.playVideo();
       });
     }
   };
