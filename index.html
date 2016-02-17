@@ -25,14 +25,14 @@
         <label for="youtubeLink">Youtube Link</label>
         <input type="text" class="form-control" id="youtubeLink" placeholder="Link" ng-model="ytLink" onclick="this.select()">
       </div>
-      <youtube  class="text-center col-xs-12" width="{{ytWidth}}" height="{{ytHeight}}" videoid="{{ytEmbedLink}}" ng-if="ytEmbedLink !== ''"></youtube>
+      <youtube  class="text-center col-xs-12" width="{{ytWidth}}" height="{{ytHeight}}" videoid="{{ytEmbedLink}}" ng-show="ytEmbedLink !== ''"></youtube>
       <div class="form-group col-xs-6">
         <label for="hours">Hours</label>
-        <input type="number" class="form-control" id="hours" value="0" onclick="this.select()">
+        <input type="number" class="form-control" id="hours" value="0" onclick="this.select()" ng-model="hours">
       </div>
       <div class="form-group col-xs-6">
         <label for="minutes">Minutes</label>
-        <input type="number" class="form-control" id="minutes" value="0" onclick="this.select()">
+        <input type="number" class="form-control" id="minutes" value="0" onclick="this.select()" ng-model="minutes">
       </div>
       <div class="col-xs-12 text-center">
         <button type="submit" class="btn btn-default">Submit</button>
@@ -41,6 +41,7 @@
 
     <!-- After timer has begun -->
     <div class="row" ng-show="!startScreenBoolean">
+      <h2 class="text-center">{{timer}}</h2>
       <div class="col-xs-12 text-center">
         <button type="submit" class="btn btn-danger" ng-click="stopTimer()">Cancel</button>
       </div>
