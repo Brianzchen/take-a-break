@@ -10,10 +10,12 @@ from all that sitting.
 Now you don't have to deal with that, this app remind you when to take breaks
 and better yet you can moderate how long you want the break to last.
 
+Feel free to change the video you want on the fly, the timer will continue to
+tick and once the timer ends the video that you've selected will play.
+
 ## How to run
 
-Choose a Youtube video of your choice (be aware that some videos may not
-play due to copyright reasons so test the video before you start your timer).
+Choose a Youtube video of your choice.
 
 Set up the timer choosing how many hours and minutes you want to work for
 between breaks.
