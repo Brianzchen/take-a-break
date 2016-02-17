@@ -39,28 +39,32 @@ myApp.controller('TimerController', ['$scope', function($scope) {
   // -----------------------------------------------------------------------------
 
   $scope.startTimer = function() {
-    // Duration is in seconds
-    $scope.setTicker();
-    var timer = $scope.duration, hours, minutes, seconds;
-    $scope.ticker = setInterval(function () {
-      hours = parseInt(timer / 60 / 60, 10);
-      minutes = parseInt(timer / 60 % 60, 10);
-      seconds = parseInt(timer % 60, 10);
+    if ($scope.startScreenBoolean === true) {
+      // Duration is in seconds
+      $scope.setTicker();
+      var timer = $scope.duration, hours, minutes, seconds;
+      $scope.ticker = setInterval(function () {
+        hours = parseInt(timer / 60 / 60, 10);
+        minutes = parseInt(timer / 60 % 60, 10);
+        seconds = parseInt(timer % 60, 10);
 
-      hours = hours  < 10 ? "0" + hours : hours;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
+        hours = hours  < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
 
-      $scope.timer = hours + ":" + minutes + ":" + seconds;
-      $scope.$apply();
+        $scope.timer = hours + ":" + minutes + ":" + seconds;
+        $scope.$apply();
 
-      if (--timer < 0) {
-        clearInterval($scope.ticker);
-        // Then run the Youtube video
-      }
-    }, 1000);
+        if (--timer < 0) {
+          clearInterval($scope.ticker);
+          // Then run the Youtube video
+        }
+      }, 1000);
 
-    $scope.startScreenBoolean = false;
+      $scope.startScreenBoolean = false;
+    } else {
+      $scope.stopTimer();
+    }
   };
 
   $scope.stopTimer = function() {
