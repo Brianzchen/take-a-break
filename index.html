@@ -23,8 +23,9 @@
     <form class="row" ng-show="startScreenBoolean" ng-submit="startTimer()">
       <div class="form-group col-xs-12">
         <label for="youtubeLink">Youtube Link</label>
-        <input type="text" class="form-control" id="youtubeLink" placeholder="Link" ng-model="ytLink">
+        <input type="text" class="form-control" id="youtubeLink" placeholder="Link" ng-model="ytLink" onclick="this.select()">
       </div>
+      <youtube  class="text-center col-xs-12" width="{{ytWidth}}" height="{{ytHeight}}" videoid="{{ytEmbedLink}}" ng-if="ytEmbedLink !== ''"></youtube>
       <div class="form-group col-xs-6">
         <label for="hours">Hours</label>
         <input type="number" class="form-control" id="hours" value="0" onclick="this.select()">
@@ -50,5 +51,6 @@
     <p class="text-center">Get the link from a Youtube video of your choice, set your timer and forget about it on a separate browser.</p>
     <p class="text-center">You'll be alerted when it's time to take a break from work, play or whatever else you do with your time by the video of your choice.</p>
     <p class="text-center">Once your video ends the timer will reset and you can continue whatever you were doing until your next break.</p>
+
   </body>
 </html>
