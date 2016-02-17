@@ -1,9 +1,12 @@
 var myApp = angular.module('myApp',[]);
 
 myApp.controller('TimerController', ['$scope', function($scope) {
+  // Defines which view to show
   $scope.startScreenBoolean = true;
+  // Youtube variables
   $scope.ytLink = "";
   $scope.ytEmbedLink = "";
+  // Timer variables
   $scope.hours = 0;
   $scope.minutes = 0;
   $scope.duration = 0;
