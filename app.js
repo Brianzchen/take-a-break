@@ -19,7 +19,6 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
   $scope.minutes = 0;
   $scope.duration = 0;
   $scope.timer = "00:00:00";
-  $scope.ticker;
 
   // Sets the Youtube video to an appropriate size
   // -----------------------------------------------------------------------------
@@ -48,7 +47,7 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
 
   $scope.sendControlEvent = function (ctrlEvent) {
     this.$broadcast(ctrlEvent);
-  }
+  };
 
   $scope.$on(YT_event.STATUS_CHANGE, function(event, data) {
     if (data == "ENDED") {
@@ -61,6 +60,7 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
 
   $scope.startTimer = function() {
     if ($scope.startScreenBoolean === true) {
+      $scope.sendControlEvent(YT_event.STOP);
       // Duration is in seconds
       $scope.setTicker();
       var timer = $scope.duration, hours, minutes, seconds;
@@ -78,7 +78,7 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
 
         if (--timer < 0) {
           clearInterval($scope.ticker);
-          $scope.sendControlEvent(YT_event.PLAY)
+          $scope.sendControlEvent(YT_event.PLAY);
         }
       }, 1000);
 
@@ -111,7 +111,7 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
     seconds = seconds < 10 ? "0" + seconds : seconds;
 
     $scope.timer = hours + ":" + minutes + ":" + seconds;
-  }
+  };
 
   $scope.$watch('hours + minutes', function(newValue, oldValue) {
     if (newValue == oldValue) {
@@ -182,7 +182,7 @@ myApp.directive('youtube', function($window, YT_event) {
                 case YT.PlayerState.PAUSED:
                   message.data = "PAUSED";
                   break;
-              };
+              }
 
               scope.$apply(function() {
                 scope.$emit(message.event, message.data);
@@ -190,7 +190,7 @@ myApp.directive('youtube', function($window, YT_event) {
             }
           }
         });
-      }
+      };
 
       scope.$watch('videoid', function(newValue, oldValue) {
         player.cueVideoById(scope.videoid);
@@ -205,6 +205,11 @@ myApp.directive('youtube', function($window, YT_event) {
 
       scope.$on(YT_event.PLAY, function () {
         player.playVideo();
+      });
+
+      scope.$on(YT_event.STOP, function () {
+        player.seekTo(0);
+        player.stopVideo();
       });
     }
   };
