@@ -17,6 +17,7 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
   // Timer variables
   $scope.hours = 0;
   $scope.minutes = 0;
+  $scope.seconds = 0;
   $scope.duration = 0;
   $scope.timer = "00:00:00";
 
@@ -99,7 +100,7 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
   };
 
   $scope.setTicker = function() {
-    var duration = ($scope.minutes*60) + ($scope.hours*60*60);
+    var duration = ($scope.minutes*60) + ($scope.hours*60*60) + $scope.seconds;
     $scope.duration = duration;
     var timer = duration, hours, minutes, seconds;
     hours = parseInt(timer / 60 / 60, 10);
