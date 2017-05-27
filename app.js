@@ -1,4 +1,5 @@
 var myApp = angular.module('myApp',[]);
+var notificationPermission;
 
 myApp.constant('YT_event', {
   STOP:            0,
@@ -20,6 +21,12 @@ myApp.controller('TimerController', ['$scope', 'YT_event', function($scope, YT_e
   $scope.seconds = 0;
   $scope.duration = 0;
   $scope.timer = "00:00:00";
+
+  // If the browser supports notifications request the permission
+  // from the user
+  window.Notification && Notification.requestPermission(function (status) {
+    notificationPermission = status;
+  });
 
   // Sets the Youtube video to an appropriate size
   // -----------------------------------------------------------------------------
@@ -194,7 +201,7 @@ myApp.directive('youtube', function($window, YT_event) {
       };
 
       scope.$watch('videoid', function(newValue, oldValue) {
-        player.cueVideoById(scope.videoid);
+        player && player.cueVideoById(scope.videoid);
       });
 
       scope.$watch('height + width', function(newValue, oldValue) {
@@ -205,6 +212,19 @@ myApp.directive('youtube', function($window, YT_event) {
       });
 
       scope.$on(YT_event.PLAY, function () {
+        if (window.Notification && notificationPermission === 'granted') {
+          var title = 'Take a Break';
+          var o = {
+            body: "It's time to take a break!",
+            icon: './notification.png',
+          }
+          var n = new Notification(title, o);
+          n.addEventListener('click', function () {
+            window.focus();
+            n.close();
+          });
+          setTimeout(n.close.bind(n), 5000);
+        }
         player.playVideo();
       });
 
