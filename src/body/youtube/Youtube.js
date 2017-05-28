@@ -12,6 +12,7 @@ export default class Youtube extends React.Component {
         <Player
           embededLink={this.state.embededLink}
           restartTimer={this.props.restartTimer}
+          startVideo={this.props.startVideo}
         />
       </div>
     );
@@ -34,4 +35,5 @@ export default class Youtube extends React.Component {
 
 Youtube.propTypes = {
   restartTimer: PropTypes.func.isRequired,
+  startVideo: PropTypes.bool.isRequired,
 };

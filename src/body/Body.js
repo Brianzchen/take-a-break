@@ -46,8 +46,11 @@ class Body extends React.Component {
     );
 
     return (
-      <form style={styles.container} onSubmit={this.startTimer}>
-        <Youtube restartTimer={this.restartTimer} />
+      <form style={styles.container} onSubmit={this.formSubmit}>
+        <Youtube
+          restartTimer={this.startTimer}
+          startVideo={this.state.startVideo}
+        />
         <Timer
           timerOn={this.state.timerOn}
           setCountdownTime={this.setCountdownTime}
@@ -64,23 +67,53 @@ class Body extends React.Component {
     this.state = {
       timerOn: false,
       currentTimeLeft: 0,
+      startVideo: false,
     };
+
+    // Request notification permission from user
+    window.Notification && Notification.requestPermission(status => {
+      this.notificationPermission = status;
+    });
+
+    window.addEventListener(`focus`, () => {
+      this.n && this.n.close();
+    });
   }
 
-  startTimer = event => {
+  formSubmit = event => {
     event.preventDefault();
+    this.startTimer();
+  }
+
+  startTimer = () => {
     this.setState({
       timerOn: true,
       endTime: new Date().getTime() + this.millisecondsToPass,
+      startVideo: false,
     }, () => {
       this.timer = setInterval(() => {
         const now = new Date().getTime();
         if (now >= this.state.endTime) {
           clearInterval(this.timer);
-          // play the video
+
           this.setState({
             currentTimeLeft: 0,
+            startVideo: true,
           });
+
+          // Create notification
+          if (window.Notification && this.notificationPermission === `granted`) {
+            const title = `Take a Break`;
+            const o = {
+              body: `It's time to take a break!`,
+              icon: `./images/notification.png`,
+            };
+            this.n = new Notification(title, o);
+            this.n.addEventListener(`click`, () => {
+              window.focus();
+              this.n.close();
+            });
+          }
         } else {
           this.setState({
             currentTimeLeft: this.state.endTime - now,
@@ -88,10 +121,6 @@ class Body extends React.Component {
         }
       }, 100);
     });
-  }
-
-  restartTimer = () => {
-
   }
 
   cancelTimer = () => {
