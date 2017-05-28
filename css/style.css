@@ -8,6 +8,14 @@ html, body, #container {
 
 input {
   font-family: 'Lato', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Disable spinner for item input */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 hr {

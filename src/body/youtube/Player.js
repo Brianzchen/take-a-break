@@ -7,19 +7,13 @@ export default class Player extends React.Component {
       `initial` : `none`;
 
     const style = {
-      border: `none`,
       display,
     };
 
-    const src = `https://www.youtube.com/embed/${this.props.embededLink}`;
-
     return (
-      <iframe
-        style={style}
-        title={`Youtube`}
-        src={src}
-        allowFullScreen
-      />
+      <div style={style}>
+        <div id={`player`} />
+      </div>
     );
   }
 
@@ -31,6 +25,17 @@ export default class Player extends React.Component {
       PLAY: 1,
       PAUSE: 2,
       STATUS_CHANGE: 3,
+    };
+
+    window.onYouTubeIframeAPIReady = () => {
+      this.player = new YT.Player(`player`, {
+        height: `390`,
+        width: `640`,
+        videoId: this.props.embededLink,
+        events: {
+
+        },
+      });
     };
   }
 }

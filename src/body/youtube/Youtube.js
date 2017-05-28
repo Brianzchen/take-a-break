@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Link from './Link';
 import Player from './Player';
@@ -8,7 +9,10 @@ export default class Youtube extends React.Component {
     return (
       <div>
         <Link setEmbededLink={this.setEmbededLink} />
-        <Player embededLink={this.state.embededLink} />
+        <Player
+          embededLink={this.state.embededLink}
+          restartTimer={this.props.restartTimer}
+        />
       </div>
     );
   }
@@ -27,3 +31,7 @@ export default class Youtube extends React.Component {
     });
   }
 }
+
+Youtube.propTypes = {
+  restartTimer: PropTypes.func.isRequired,
+};

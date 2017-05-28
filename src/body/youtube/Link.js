@@ -16,7 +16,7 @@ class Link extends React.Component {
       },
       input: {
         display: `block`,
-        width: `100%`,
+        width: `calc(100% - 16px)`,
         padding: `8px`,
         margin: `4px`,
         borderRadius: `6px`,

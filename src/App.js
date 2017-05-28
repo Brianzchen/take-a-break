@@ -10,8 +10,8 @@ function App() {
     color: `#333`,
     margin: `auto`,
     width: `100%`,
-    '@media (min-width: 1200px)': {
-      maxWidth: `1200px`,
+    '@media (min-width: 1000px)': {
+      maxWidth: `1000px`,
     },
   };
 
