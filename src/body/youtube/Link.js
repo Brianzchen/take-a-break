@@ -6,16 +6,17 @@ class Link extends React.Component {
   render() {
     const styles = {
       container: {
-        width: `100%`,
+        verticalAlign: `top`,
+        display: `inline-block`,
+        width: `75%`,
         textAlign: `left`,
-        marginBottom: `8px`,
       },
       label: {
         display: `block`,
         marginLeft: `4px`,
       },
       input: {
-        display: `block`,
+        display: `inline-block`,
         width: `calc(100% - 16px)`,
         padding: `8px`,
         margin: `4px`,

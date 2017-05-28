@@ -3,52 +3,17 @@ import Radium from 'radium';
 
 import Youtube from './youtube/Youtube';
 import Timer from './timer/Timer';
+import Button from './button/Button';
 
 class Body extends React.Component {
   render() {
-    const styles = {
-      container: {
-        textAlign: `center`,
-        marginBottom: `24px`,
-      },
-      submit: {
-        outline: `none`,
-        backgroundColor: `transparent`,
-        border: `1px solid #ccc`,
-        borderRadius: `6px`,
-        color: `#333`,
-        fontSize: `18px`,
-        marginTop: `8px`,
-        padding: `8px 16px`,
-        cursor: `pointer`,
-        ':hover': {
-          backgroundColor: `#eee`,
-        },
-        ':active': {
-          backgroundColor: `#ccc`,
-        },
-      },
-      cancel: {
-        border: `1px solid #d9534f`,
-        color: `white`,
-        backgroundColor: `#d9534f`,
-        ':hover': {
-          backgroundColor: `#cc3a36`,
-        },
-        ':active': {
-          backgroundColor: `#c9211c`,
-        },
-      },
+    const style = {
+      textAlign: `center`,
+      marginBottom: `24px`,
     };
 
-    const button = this.state.timerOn ? (
-      <button style={[styles.submit, styles.cancel]} onClick={this.cancelTimer}>Cancel</button>
-    ) : (
-      <input style={styles.submit} type={`submit`} value={`Start`} />
-    );
-
     return (
-      <form style={styles.container} onSubmit={this.formSubmit}>
+      <form style={style} onSubmit={this.formSubmit}>
         <Youtube
           restartTimer={this.startTimer}
           startVideo={this.state.startVideo}
@@ -58,7 +23,7 @@ class Body extends React.Component {
           setCountdownTime={this.setCountdownTime}
           currentTimeLeft={this.state.currentTimeLeft}
         />
-        {button}
+        <Button timerOn={this.state.timerOn} cancelTimer={this.cancelTimer} />
       </form>
     );
   }

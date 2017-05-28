@@ -22,12 +22,7 @@ export default class Player extends React.Component {
   constructor(props) {
     super(props);
 
-    this.ytConstants = {
-      STOP: 0,
-      PLAY: 1,
-      PAUSE: 2,
-      STATUS_CHANGE: 3,
-    };
+    this.repeatCounter = 0;
 
     window.onYouTubeIframeAPIReady = () => {
       this.player = new YT.Player(`player`, {
@@ -38,10 +33,14 @@ export default class Player extends React.Component {
           onStateChange: event => {
             switch (event.data) {
               case YT.PlayerState.PLAYING:
-                // this.props.stopTimer();
                 break;
               case YT.PlayerState.ENDED:
-                this.props.restartTimer();
+                if (this.repeatCounter >= this.props.repeat) {
+                  this.props.restartTimer();
+                } else {
+                  this.player.playVideo();
+                  this.repeatCounter += 1;
+                }
                 break;
               case YT.PlayerState.UNSTARTED:
                 break;
@@ -68,4 +67,5 @@ Player.propTypes = {
   embededLink: PropTypes.string.isRequired,
   restartTimer: PropTypes.func.isRequired,
   startVideo: PropTypes.bool.isRequired,
+  repeat: PropTypes.number.isRequired,
 };
