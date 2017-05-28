@@ -115,6 +115,7 @@ class Body extends React.Component {
               window.focus();
               this.n.close();
             });
+            setTimeout(this.n.close.bind(this.n), 60000);
           }
         } else {
           this.setState({

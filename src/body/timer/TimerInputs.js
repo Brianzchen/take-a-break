@@ -27,6 +27,7 @@ export default class TimerInputs extends React.Component {
       minutes: 0,
       seconds: 0,
     };
+    this.passBackTime();
   }
 
   setHours = event => {
