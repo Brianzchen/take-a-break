@@ -9,6 +9,7 @@ class Body extends React.Component {
     const styles = {
       container: {
         textAlign: `center`,
+        marginBottom: `24px`,
       },
       submit: {
         outline: `none`,
@@ -28,6 +29,7 @@ class Body extends React.Component {
         },
       },
       cancel: {
+        border: `1px solid #d9534f`,
         color: `white`,
         backgroundColor: `#d9534f`,
         ':hover': {

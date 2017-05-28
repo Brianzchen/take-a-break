@@ -6,7 +6,8 @@ import Input from './Input';
 export default class TimerInputs extends React.Component {
   render() {
     const style = {
-      display: this.props.timerOn ? `none` : `initial`,
+      display: this.props.timerOn ? `none` : `block`,
+      width: `100%`,
     };
 
     return (
@@ -29,24 +30,21 @@ export default class TimerInputs extends React.Component {
   }
 
   setHours = event => {
-    this.setState({
-      hours: parseInt(event.target.value, 10),
-    }, () => {
-      this.passBackTime();
-    });
+    this.setTime(`hours`, event);
   }
 
   setMinutes = event => {
-    this.setState({
-      minutes: parseInt(event.target.value, 10),
-    }, () => {
-      this.passBackTime();
-    });
+    this.setTime(`minutes`, event);
   }
 
   setSeconds = event => {
+    this.setTime(`seconds`, event);
+  }
+
+  setTime = (type, event) => {
+    const value = event.target.value === `` ? 0 : parseInt(event.target.value, 10);
     this.setState({
-      seconds: parseInt(event.target.value, 10),
+      [type]: value,
     }, () => {
       this.passBackTime();
     });

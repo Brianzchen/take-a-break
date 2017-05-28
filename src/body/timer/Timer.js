@@ -5,12 +5,16 @@ import TimerInputs from './TimerInputs';
 import CountDown from './CountDown';
 
 export default function Timer(props) {
+  const style = {
+    width: `100%`,
+  };
+
   const countdown = props.timerOn ? (
     <CountDown currentTimeLeft={props.currentTimeLeft} />
   ) : null;
 
   return (
-    <div>
+    <div style={style}>
       <TimerInputs timerOn={props.timerOn} setCountdownTime={props.setCountdownTime} />
       {countdown}
     </div>

@@ -1,17 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 
-export default class Input extends React.Component {
+class Input extends React.Component {
   render() {
     const styles = {
       container: {
         display: `inline-block`,
+        width: `33%`,
+        paddingRight: `8px`,
+        boxSizing: `border-box`,
       },
       label: {
+        textAlign: `left`,
         display: `block`,
       },
       input: {
         display: `block`,
+        boxSizing: `border-box`,
+        width: `100%`,
+        fontSize: `16px`,
+        padding: `8px`,
+        borderRadius: `6px`,
+        outline: `none`,
+        border: `1px solid #ccc`,
+        ':focus': {
+          border: `1px solid #69b0e8`,
+        },
       },
     };
 
@@ -43,3 +58,5 @@ Input.propTypes = {
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
 };
+
+export default Radium(Input);
