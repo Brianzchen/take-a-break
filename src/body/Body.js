@@ -99,6 +99,7 @@ class Body extends React.Component {
   }
 
   cancelTimer = () => {
+    clearInterval(this.timer);
     this.setState({
       timerOn: false,
     });
