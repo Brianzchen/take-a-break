@@ -23,9 +23,9 @@ export default class TimerInputs extends React.Component {
     super(props);
 
     this.state = {
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
+      hours: `0`,
+      minutes: `0`,
+      seconds: `0`,
     };
     this.passBackTime();
   }
@@ -43,9 +43,8 @@ export default class TimerInputs extends React.Component {
   }
 
   setTime = (type, event) => {
-    const value = event.target.value === `` ? 0 : parseInt(event.target.value, 10);
     this.setState({
-      [type]: value,
+      [type]: event.target.value,
     }, () => {
       this.passBackTime();
     });

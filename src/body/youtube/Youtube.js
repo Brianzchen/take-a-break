@@ -16,7 +16,7 @@ export default class Youtube extends React.Component {
     return (
       <div>
         <div style={styles.inputRow}>
-          <Link setEmbededLink={this.setEmbededLink} />
+          <Link setEmbededLink={this.props.setEmbededLink} />
           <RepeatField
             repeat={this.state.repeat}
             increaseRepeat={this.increaseRepeat}
@@ -24,7 +24,7 @@ export default class Youtube extends React.Component {
           />
         </div>
         <Player
-          embededLink={this.state.embededLink}
+          embededLink={this.props.embededLink}
           restartTimer={this.props.restartTimer}
           startVideo={this.props.startVideo}
           repeat={this.state.repeat}
@@ -37,15 +37,8 @@ export default class Youtube extends React.Component {
     super(props);
 
     this.state = {
-      embededLink: ``,
       repeat: 0,
     };
-  }
-
-  setEmbededLink = link => {
-    this.setState({
-      embededLink: link.substr(`https://www.youtube.com/watch?v=`.length),
-    });
   }
 
   increaseRepeat = () => {
@@ -66,4 +59,6 @@ export default class Youtube extends React.Component {
 Youtube.propTypes = {
   restartTimer: PropTypes.func.isRequired,
   startVideo: PropTypes.bool.isRequired,
+  embededLink: PropTypes.string.isRequired,
+  setEmbededLink: PropTypes.func.isRequired,
 };

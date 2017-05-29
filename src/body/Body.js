@@ -17,6 +17,8 @@ class Body extends React.Component {
         <Youtube
           restartTimer={this.startTimer}
           startVideo={this.state.startVideo}
+          embededLink={this.state.embededLink}
+          setEmbededLink={this.setEmbededLink}
         />
         <Timer
           timerOn={this.state.timerOn}
@@ -35,6 +37,7 @@ class Body extends React.Component {
       timerOn: false,
       currentTimeLeft: 0,
       startVideo: false,
+      embededLink: ``,
     };
 
     // Request notification permission from user
@@ -53,6 +56,10 @@ class Body extends React.Component {
   }
 
   startTimer = () => {
+    if (this.millisecondsToPass === 0 || this.state.embededLink.length === 0) {
+      return;
+    }
+
     this.setState({
       timerOn: true,
       endTime: new Date().getTime() + this.millisecondsToPass,
@@ -99,6 +106,12 @@ class Body extends React.Component {
 
   setCountdownTime = milliseconds => {
     this.millisecondsToPass = milliseconds;
+  }
+
+  setEmbededLink = link => {
+    this.setState({
+      embededLink: link.substr(`https://www.youtube.com/watch?v=`.length),
+    });
   }
 }
 
