@@ -6,7 +6,7 @@ export default function RepeatField(props) {
     container: {
       verticalAlign: `top`,
       display: `inline-block`,
-      width: `25%`,
+      width: `10%`,
     },
     label: {
 

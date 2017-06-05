@@ -1,5 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
+import { clone } from 'lodash';
 
 import Youtube from './youtube/Youtube';
 import Timer from './timer/Timer';
@@ -17,7 +18,7 @@ class Body extends React.Component {
         <Youtube
           restartTimer={this.startTimer}
           startVideo={this.state.startVideo}
-          embededLink={this.state.embededLink}
+          embededLinks={this.state.embededLinks}
           setEmbededLink={this.setEmbededLink}
         />
         <Timer
@@ -37,7 +38,7 @@ class Body extends React.Component {
       timerOn: false,
       currentTimeLeft: 0,
       startVideo: false,
-      embededLink: ``,
+      embededLinks: [``],
     };
 
     // Request notification permission from user
@@ -56,7 +57,7 @@ class Body extends React.Component {
   }
 
   startTimer = () => {
-    if (this.millisecondsToPass === 0 || this.state.embededLink.length === 0) {
+    if (this.millisecondsToPass === 0 || this.state.embededLinks[0].length === 0) {
       return;
     }
 
@@ -109,9 +110,18 @@ class Body extends React.Component {
     this.millisecondsToPass = milliseconds;
   }
 
-  setEmbededLink = link => {
+  setEmbededLink = (link, track) => {
+    const sublink = link.substr(`https://www.youtube.com/watch?v=`.length);
+
+    const embededLinks = clone(this.state.embededLinks);
+    if (typeof embededLinks[track] !== `undefined`) {
+      embededLinks[track] = sublink;
+    } else {
+      embededLinks.push(sublink);
+    }
+
     this.setState({
-      embededLink: link.substr(`https://www.youtube.com/watch?v=`.length),
+      embededLinks,
     });
   }
 }

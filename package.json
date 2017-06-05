@@ -9,6 +9,7 @@
   "author": "",
   "private": true,
   "dependencies": {
+    "immutability-helper": "^2.2.2",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "radium": "^0.19.1",

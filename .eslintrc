@@ -18,6 +18,7 @@
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/sort-comp": [1, { order: ['static', 'render', 'lifecycle', 'everything-else'] }],
     "no-alert": 0,
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
   },
   "globals": {
     "google": true,

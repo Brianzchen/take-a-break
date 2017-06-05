@@ -1,30 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Link from './Link';
-import RepeatField from './RepeatField';
+import Inputs from './inputs/Inputs';
 import Player from './Player';
 
 export default class Youtube extends React.Component {
   render() {
-    const styles = {
-      inputRow: {
-        marginBottom: `8px`,
-      },
-    };
-
     return (
       <div>
-        <div style={styles.inputRow}>
-          <Link setEmbededLink={this.props.setEmbededLink} />
-          <RepeatField
-            repeat={this.state.repeat}
-            increaseRepeat={this.increaseRepeat}
-            decreaseRepeat={this.decreaseRepeat}
-          />
-        </div>
+        <Inputs
+          setEmbededLink={this.props.setEmbededLink}
+          repeat={this.state.repeat}
+          increaseRepeat={this.increaseRepeat}
+          decreaseRepeat={this.decreaseRepeat}
+        />
         <Player
-          embededLink={this.props.embededLink}
+          embededLinks={this.props.embededLinks}
           restartTimer={this.props.restartTimer}
           startVideo={this.props.startVideo}
           repeat={this.state.repeat}
@@ -59,6 +50,6 @@ export default class Youtube extends React.Component {
 Youtube.propTypes = {
   restartTimer: PropTypes.func.isRequired,
   startVideo: PropTypes.bool.isRequired,
-  embededLink: PropTypes.string.isRequired,
+  embededLinks: PropTypes.arrayOf(PropTypes.string).isRequired,
   setEmbededLink: PropTypes.func.isRequired,
 };

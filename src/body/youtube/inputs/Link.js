@@ -7,13 +7,8 @@ class Link extends React.Component {
     const styles = {
       container: {
         verticalAlign: `top`,
-        display: `inline-block`,
-        width: `75%`,
         textAlign: `left`,
-      },
-      label: {
-        display: `block`,
-        marginLeft: `4px`,
+        width: `100%`,
       },
       input: {
         display: `inline-block`,
@@ -29,13 +24,8 @@ class Link extends React.Component {
       },
     };
 
-    const label = `Youtube Link`;
-
     return (
       <div style={styles.container}>
-        <label style={styles.label} htmlFor={`youtubeInput`}>
-          {label}
-        </label>
         <input
           style={styles.input}
           id={`youtubeInput`}
