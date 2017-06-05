@@ -24,7 +24,7 @@ export default class Player extends React.Component {
 
     this.repeatCounter = 0;
 
-    window.onYouTubeIframeAPIReady = () => {
+    window.initReactPlayer = () => {
       this.player = new YT.Player(`player`, {
         height: `390`,
         width: `640`,
@@ -36,6 +36,7 @@ export default class Player extends React.Component {
                 break;
               case YT.PlayerState.ENDED:
                 if (this.repeatCounter >= this.props.repeat) {
+                  this.repeatCounter = 0;
                   this.props.restartTimer();
                 } else {
                   this.player.playVideo();
@@ -56,6 +57,7 @@ export default class Player extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!this.player) return;
     this.player.cueVideoById(nextProps.embededLink);
     if (!this.props.startVideo && nextProps.startVideo) {
       this.player.playVideo();
