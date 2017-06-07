@@ -24,10 +24,18 @@ export default class Player extends React.Component {
 
     this.repeatCounter = 0;
     this.playlistCounter = 0;
+  }
 
-    window.initReactPlayer = () => {
+  componentDidMount() {
+    const tag = document.createElement(`script`);
+
+    tag.src = `https://www.youtube.com/iframe_api`;
+    const firstScriptTag = document.getElementsByTagName(`script`)[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = () => {
       this.player = new YT.Player(`player`, {
-        height: `390`,
+        height: `360`,
         width: `640`,
         videoId: this.props.embededLinks[0],
         events: {
