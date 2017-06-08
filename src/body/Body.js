@@ -41,6 +41,9 @@ class Body extends React.Component {
       embededLinks: [``],
     };
 
+    // Flag to check whether there is a notification already open
+    this.notificationOpen = false;
+
     // Request notification permission from user
     window.Notification && Notification.requestPermission(status => {
       this.notificationPermission = status;
@@ -48,6 +51,7 @@ class Body extends React.Component {
 
     window.addEventListener(`focus`, () => {
       this.n && this.n.close();
+      this.notificationOpen = false;
     });
   }
 
@@ -77,18 +81,22 @@ class Body extends React.Component {
           });
 
           // Create notification
-          if (window.Notification && this.notificationPermission === `granted`) {
+          if (window.Notification &&
+              this.notificationPermission === `granted` &&
+              !this.notificationOpen &&
+              !document.hasFocus()) {
             const title = `Take a Break`;
             const o = {
               body: `It's time to take a break!`,
               icon: `./images/notification.png`,
             };
             this.n = new Notification(title, o);
+            this.notificationOpen = true;
             this.n.addEventListener(`click`, () => {
               window.focus();
               this.n.close();
+              this.notificationOpen = false;
             });
-            setTimeout(this.n.close.bind(this.n), 60000);
           }
         } else {
           this.setState({
