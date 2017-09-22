@@ -1,3 +1,5 @@
+import { actions as notificationActions } from 'reducers/notification';
+
 import { SET_TIMER_DURATION, SET_CURRENT_TIME_LEFT, SET_TIMER_STATUS } from './constants';
 
 export const setTimerDuration = time => ({
@@ -35,6 +37,7 @@ export const startTimer = () => (
 
       if (!getState().timer.timerOn || getState().timer.currentTimeLeft <= 0) {
         clearInterval(interval);
+        dispatch(notificationActions.createNotification());
       } else {
         dispatch(setCurrentTimeLeft(Math.max(endTime - now, 0)));
       }
