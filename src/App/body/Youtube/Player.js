@@ -2,7 +2,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+import { actions } from 'reducers/timer';
 
 class Player extends React.Component {
   constructor(props) {
@@ -62,7 +65,7 @@ class Player extends React.Component {
 
       if (this.repeatCounter >= this.props.repeat) {
         this.repeatCounter = 0;
-        this.props.restartTimer();
+        this.props.actions.startTimer();
       } else {
         this.player.playVideo();
         this.repeatCounter += 1;
@@ -88,15 +91,24 @@ class Player extends React.Component {
 }
 
 Player.propTypes = {
-  links: PropTypes.arrayOf(PropTypes.string).isRequired,
-  restartTimer: PropTypes.func.isRequired,
   startVideo: PropTypes.bool.isRequired,
   repeat: PropTypes.number.isRequired,
+  links: PropTypes.arrayOf(PropTypes.string).isRequired,
+  actions: PropTypes.shape({
+    startTimer: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({
+  startVideo: !state.timer.timerOn && state.timer.currentTimeLeft <= 0,
   repeat: state.youtube.repeats,
   links: state.youtube.links,
 });
 
-export default connect(mapStateToProps)(Player);
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({
+    ...actions,
+  }, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

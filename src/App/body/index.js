@@ -99,10 +99,7 @@ class Body extends React.Component {
           this.props.actions.startTimer();
         }}
       >
-        <Youtube
-          restartTimer={this.startTimer}
-          startVideo={this.state.startVideo}
-        />
+        <Youtube />
         <Timer />
         <Button />
       </form>

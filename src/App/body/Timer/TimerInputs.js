@@ -12,9 +12,9 @@ class TimerInputs extends React.Component {
     super(props);
 
     this.state = {
-      hours: '0',
-      minutes: '0',
-      seconds: '0',
+      hours: props.timerDuration / 60 / 60 / 1000,
+      minutes: props.timerDuration / 60 / 1000,
+      seconds: props.timerDuration / 1000,
     };
     this.passBackTime();
   }
@@ -45,7 +45,7 @@ class TimerInputs extends React.Component {
     const minutes = this.state.minutes * 60 * 1000;
     const seconds = this.state.seconds * 1000;
 
-    this.props.actions.setCurrentTime(hours + minutes + seconds);
+    this.props.actions.setTimerDuration(hours + minutes + seconds);
   }
 
   render() {
@@ -56,22 +56,24 @@ class TimerInputs extends React.Component {
 
     return (
       <div style={style}>
-        <Input label={'Hours'} value={this.state.hours} onChange={this.setHours} />
-        <Input label={'Minutes'} value={this.state.minutes} onChange={this.setMinutes} />
-        <Input label={'Seconds'} value={this.state.seconds} onChange={this.setSeconds} />
+        <Input label="Hours" value={this.state.hours} onChange={this.setHours} />
+        <Input label="Minutes" value={this.state.minutes} onChange={this.setMinutes} />
+        <Input label="Seconds" value={this.state.seconds} onChange={this.setSeconds} />
       </div>
     );
   }
 }
 
 TimerInputs.propTypes = {
+  timerDuration: PropTypes.number.isRequired,
   timerOn: PropTypes.bool.isRequired,
   actions: PropTypes.shape({
-    setCurrentTime: PropTypes.func.isRequired,
+    setTimerDuration: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 const mapStateToProps = state => ({
+  timerDuration: state.timer.timerDuration,
   timerOn: state.timer.timerOn,
 });
 

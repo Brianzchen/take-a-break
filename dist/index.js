@@ -4919,6 +4919,8 @@ module.exports = g;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var SET_TIMER_DURATION = exports.SET_TIMER_DURATION = 'TIMER/SET_TIMER_DURATION';
+
 var SET_CURRENT_TIME = exports.SET_CURRENT_TIME = 'TIMER/SET_CURRENT_TIME';
 
 var SET_TIMER_STATUS = exports.SET_TIMER_STATUS = 'TIMER/SET_TIMER_STATUS';
@@ -29701,24 +29703,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(17);
 
-var _reducer = __webpack_require__(144);
+var _reducer = __webpack_require__(147);
 
 var _reducer2 = _interopRequireDefault(_reducer);
 
-var _reducer3 = __webpack_require__(147);
+var _reducer3 = __webpack_require__(150);
 
 var _reducer4 = _interopRequireDefault(_reducer3);
-
-var _reducer5 = __webpack_require__(150);
-
-var _reducer6 = _interopRequireDefault(_reducer5);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
-  form: _reducer2.default,
-  timer: _reducer4.default,
-  youtube: _reducer6.default
+  timer: _reducer2.default,
+  youtube: _reducer4.default
 });
 
 /***/ }),
@@ -30029,7 +30026,7 @@ var Input = function (_React$Component) {
 
 Input.propTypes = {
   label: _propTypes2.default.string.isRequired,
-  value: _propTypes2.default.string.isRequired,
+  value: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]).isRequired,
   onChange: _propTypes2.default.func.isRequired
 };
 
@@ -30110,13 +30107,13 @@ var TimerInputs = function (_React$Component) {
       var minutes = _this.state.minutes * 60 * 1000;
       var seconds = _this.state.seconds * 1000;
 
-      _this.props.actions.setCurrentTime(hours + minutes + seconds);
+      _this.props.actions.setTimerDuration(hours + minutes + seconds);
     };
 
     _this.state = {
-      hours: '0',
-      minutes: '0',
-      seconds: '0'
+      hours: props.timerDuration / 60 / 60 / 1000,
+      minutes: props.timerDuration / 60 / 1000,
+      seconds: props.timerDuration / 1000
     };
     _this.passBackTime();
     return _this;
@@ -30144,14 +30141,16 @@ var TimerInputs = function (_React$Component) {
 }(_react2.default.Component);
 
 TimerInputs.propTypes = {
+  timerDuration: _propTypes2.default.number.isRequired,
   timerOn: _propTypes2.default.bool.isRequired,
   actions: _propTypes2.default.shape({
-    setCurrentTime: _propTypes2.default.func.isRequired
+    setTimerDuration: _propTypes2.default.func.isRequired
   }).isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
+    timerDuration: state.timer.timerDuration,
     timerOn: state.timer.timerOn
   };
 };
@@ -30799,6 +30798,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(4);
@@ -30809,7 +30810,11 @@ var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _redux = __webpack_require__(17);
+
 var _reactRedux = __webpack_require__(16);
+
+var _timer = __webpack_require__(41);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30833,7 +30838,7 @@ var Player = function (_React$Component) {
 
         if (_this.repeatCounter >= _this.props.repeat) {
           _this.repeatCounter = 0;
-          _this.props.restartTimer();
+          _this.props.actions.startTimer();
         } else {
           _this.player.playVideo();
           _this.repeatCounter += 1;
@@ -30915,20 +30920,29 @@ var Player = function (_React$Component) {
 }(_react2.default.Component);
 
 Player.propTypes = {
-  links: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
-  restartTimer: _propTypes2.default.func.isRequired,
   startVideo: _propTypes2.default.bool.isRequired,
-  repeat: _propTypes2.default.number.isRequired
+  repeat: _propTypes2.default.number.isRequired,
+  links: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
+  actions: _propTypes2.default.shape({
+    startTimer: _propTypes2.default.func.isRequired
+  }).isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
+    startVideo: !state.timer.timerOn && state.timer.currentTimeLeft <= 0,
     repeat: state.youtube.repeats,
     links: state.youtube.links
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Player);
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    actions: (0, _redux.bindActionCreators)(_extends({}, _timer.actions), dispatch)
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Player);
 
 /***/ }),
 /* 138 */
@@ -30945,10 +30959,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 var _Inputs = __webpack_require__(136);
 
 var _Inputs2 = _interopRequireDefault(_Inputs);
@@ -30959,21 +30969,13 @@ var _Player2 = _interopRequireDefault(_Player);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Youtube = function Youtube(props) {
+var Youtube = function Youtube() {
   return _react2.default.createElement(
     'div',
     null,
     _react2.default.createElement(_Inputs2.default, null),
-    _react2.default.createElement(_Player2.default, {
-      restartTimer: props.restartTimer,
-      startVideo: props.startVideo
-    })
+    _react2.default.createElement(_Player2.default, null)
   );
-};
-
-Youtube.propTypes = {
-  restartTimer: _propTypes2.default.func.isRequired,
-  startVideo: _propTypes2.default.bool.isRequired
 };
 
 exports.default = Youtube;
@@ -31127,10 +31129,7 @@ var Body = function (_React$Component) {
             _this2.props.actions.startTimer();
           }
         },
-        _react2.default.createElement(_Youtube2.default, {
-          restartTimer: this.startTimer,
-          startVideo: this.state.startVideo
-        }),
+        _react2.default.createElement(_Youtube2.default, null),
         _react2.default.createElement(_Timer2.default, null),
         _react2.default.createElement(_Button2.default, null)
       );
@@ -31314,45 +31313,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ), document.getElementById('container'));
 
 /***/ }),
-/* 143 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {};
-
-/***/ }),
-/* 144 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _initialState = __webpack_require__(143);
-
-var _initialState2 = _interopRequireDefault(_initialState);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState2.default;
-  var action = arguments[1];
-
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
-
-/***/ }),
+/* 143 */,
+/* 144 */,
 /* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31362,9 +31324,16 @@ exports.default = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.cancelTimer = exports.startTimer = exports.setTimerStatus = exports.setCurrentTime = undefined;
+exports.startTimer = exports.cancelTimer = exports.setTimerStatus = exports.setCurrentTime = exports.setTimerDuration = undefined;
 
 var _constants = __webpack_require__(40);
+
+var setTimerDuration = exports.setTimerDuration = function setTimerDuration(time) {
+  return {
+    type: _constants.SET_TIMER_DURATION,
+    payload: time
+  };
+};
 
 var setCurrentTime = exports.setCurrentTime = function setCurrentTime(newTime) {
   return {
@@ -31380,17 +31349,30 @@ var setTimerStatus = exports.setTimerStatus = function setTimerStatus(bool) {
   };
 };
 
-var startTimer = exports.startTimer = function startTimer() {
-  return function (dispatch) {
-    dispatch(setTimerStatus(true));
-    console.log('timer is starting'); // eslint-disable-line
-  };
-};
-
 var cancelTimer = exports.cancelTimer = function cancelTimer() {
   return function (dispatch) {
     dispatch(setTimerStatus(false));
-    console.log('timer is stopping'); // eslint-disable-line
+  };
+};
+
+var startTimer = exports.startTimer = function startTimer() {
+  return function (dispatch, getState) {
+    if (getState().timer.timerDuration <= 0 || getState().youtube.links[0].length === 0) return;
+
+    dispatch(setTimerStatus(true));
+
+    var endTime = new Date().getTime() + getState().timer.timerDuration;
+
+    var interval = setInterval(function () {
+      var now = new Date().getTime();
+
+      if (!getState().timer.timerOn || now >= endTime) {
+        clearInterval(interval);
+        dispatch(cancelTimer());
+      } else {
+        dispatch(setCurrentTime(endTime - now));
+      }
+    }, 100);
   };
 };
 
@@ -31405,6 +31387,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = {
+  timerDuration: 0,
   timerOn: false,
   currentTimeLeft: 0
 };
@@ -31435,6 +31418,10 @@ exports.default = function () {
   var action = arguments[1];
 
   switch (action.type) {
+    case _constants.SET_TIMER_DURATION:
+      return _extends({}, state, {
+        timerDuration: action.payload
+      });
     case _constants.SET_CURRENT_TIME:
       return _extends({}, state, {
         currentTimeLeft: action.payload
