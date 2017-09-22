@@ -2,6 +2,7 @@ import React from 'react';
 
 const styles = {
   container: {
+    marginBottom: '16px',
     fontSize: '14px',
     textAlign: 'center',
   },

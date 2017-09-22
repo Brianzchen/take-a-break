@@ -1,4 +1,4 @@
 export default {
   repeats: 0,
-  links: [''],
+  links: JSON.parse(localStorage.getItem('links')) || [''],
 };

@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import Playlist from './Playlist';
+import Links from './Links';
 import RepeatField from './RepeatField';
 
 const style = {
@@ -10,7 +9,7 @@ const style = {
 
 const Inputs = () => (
   <div style={style}>
-    <Playlist />
+    <Links />
     <RepeatField />
   </div>
 );

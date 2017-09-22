@@ -43,5 +43,6 @@ export const addLink = (link, index) => (
     }
 
     dispatch(setLinks(links));
+    localStorage.setItem('links', JSON.stringify(links));
   }
 );

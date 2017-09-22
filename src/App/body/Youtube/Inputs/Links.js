@@ -16,18 +16,6 @@ class Links extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.isPlaylist && nextProps.isPlaylist) {
-      this.setState({
-        links: 2,
-      });
-    } else if (this.props.isPlaylist && !nextProps.isPlaylist) {
-      this.setState({
-        links: 1,
-      });
-    }
-  }
-
   render() {
     const styles = {
       container: {
@@ -70,7 +58,6 @@ Links.propTypes = {
   actions: PropTypes.shape({
     addLink: PropTypes.func.isRequired,
   }).isRequired,
-  isPlaylist: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({

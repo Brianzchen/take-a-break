@@ -4,8 +4,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
 
 import { actions } from 'reducers/timer';
+import getVideoId from 'lib/getVideoId';
 
 class Player extends React.Component {
   constructor(props) {
@@ -26,7 +28,7 @@ class Player extends React.Component {
       this.player = new YT.Player('player', {
         height: '360',
         width: '640',
-        videoId: this.props.links[0],
+        videoId: getVideoId(this.props.links[0]),
         events: {
           onStateChange: event => {
             switch (event.data) {
@@ -51,9 +53,10 @@ class Player extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!this.player) return;
 
-    this.player.cueVideoById(
-      nextProps.links[this.playlistCounter].substr('https://www.youtube.com/watch?v='.length),
-    );
+    if (!isEqual(this.props.links, nextProps.links)) {
+      this.player.cueVideoById(getVideoId(nextProps.links[this.playlistCounter]));
+    }
+
     if (!this.props.startVideo && nextProps.startVideo) {
       this.player.playVideo();
     }
@@ -100,7 +103,7 @@ Player.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  startVideo: !state.timer.timerOn && state.timer.currentTimeLeft <= 0,
+  startVideo: state.timer.timerOn && state.timer.currentTimeLeft <= 0,
   repeat: state.youtube.repeats,
   links: state.youtube.links,
 });
