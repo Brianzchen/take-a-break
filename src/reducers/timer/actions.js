@@ -17,6 +17,13 @@ export const setTimerStatus = bool => ({
   payload: bool,
 });
 
+export const applyTimerDuration = time => (
+  dispatch => {
+    dispatch(setTimerDuration(time));
+    localStorage.setItem('timerDuration', time);
+  }
+);
+
 export const cancelTimer = () => (
   dispatch => {
     dispatch(setTimerStatus(false));

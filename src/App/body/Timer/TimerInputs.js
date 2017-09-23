@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { toHours, toMinutes, toSeconds } from 'lib/timeConversion';
 import { actions } from 'reducers/timer';
 
 import Input from './Input';
@@ -11,54 +12,55 @@ class TimerInputs extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      hours: props.timerDuration / 60 / 60 / 1000,
-      minutes: props.timerDuration / 60 / 1000,
-      seconds: props.timerDuration / 1000,
-    };
-    this.passBackTime();
+    this.convertTime(props.timerDuration);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.convertTime(nextProps.timerDuration);
   }
 
   setHours = event => {
-    this.setTime('hours', event);
+    this.setTime('hours', event.target.value);
   }
 
   setMinutes = event => {
-    this.setTime('minutes', event);
+    this.setTime('minutes', event.target.value);
   }
 
   setSeconds = event => {
-    this.setTime('seconds', event);
+    this.setTime('seconds', event.target.value);
   }
 
-  setTime = (type, event) => {
-    this.setState({
-      [type]: event.target.value,
-    }, () => {
-      this.passBackTime();
-    });
+  setTime = (type, value) => {
+    this[type] = value;
+    this.passBackTime();
+  }
+
+  convertTime = timerDuration => {
+    this.hours = toHours(timerDuration);
+    this.minutes = toMinutes(timerDuration);
+    this.seconds = toSeconds(timerDuration);
   }
 
   passBackTime = () => {
     // Get the amount of time that needs to pass in milliseconds
-    const hours = this.state.hours * 60 * 60 * 1000;
-    const minutes = this.state.minutes * 60 * 1000;
-    const seconds = this.state.seconds * 1000;
+    const hours = this.hours * 60 * 60 * 1000;
+    const minutes = this.minutes * 60 * 1000;
+    const seconds = this.seconds * 1000;
 
-    this.props.actions.setTimerDuration(hours + minutes + seconds);
+    this.props.actions.applyTimerDuration(hours + minutes + seconds);
   }
 
   render() {
     const style = {
-      display: this.props.timerOn ? 'none' : 'block',
       width: '100%',
     };
 
     return (
       <div style={style}>
-        <Input label="Hours" value={this.state.hours} onChange={this.setHours} />
-        <Input label="Minutes" value={this.state.minutes} onChange={this.setMinutes} />
-        <Input label="Seconds" value={this.state.seconds} onChange={this.setSeconds} />
+        <Input label="Hours" value={this.hours} onChange={this.setHours} />
+        <Input label="Minutes" value={this.minutes} onChange={this.setMinutes} />
+        <Input label="Seconds" value={this.seconds} onChange={this.setSeconds} />
       </div>
     );
   }
@@ -66,15 +68,13 @@ class TimerInputs extends React.Component {
 
 TimerInputs.propTypes = {
   timerDuration: PropTypes.number.isRequired,
-  timerOn: PropTypes.bool.isRequired,
   actions: PropTypes.shape({
-    setTimerDuration: PropTypes.func.isRequired,
+    applyTimerDuration: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 const mapStateToProps = state => ({
   timerDuration: state.timer.timerDuration,
-  timerOn: state.timer.timerOn,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import TimerInputs from './TimerInputs';
 import CountDown from './CountDown';
@@ -7,11 +9,22 @@ const style = {
   width: '100%',
 };
 
-const Timer = () => (
+const Timer = props => (
   <div style={style}>
-    <TimerInputs />
-    <CountDown />
+    {props.timerOn ? (
+      <CountDown />
+    ) : (
+      <TimerInputs />
+    )}
   </div>
 );
 
-export default Timer;
+Timer.propTypes = {
+  timerOn: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+  timerOn: state.timer.timerOn,
+});
+
+export default connect(mapStateToProps)(Timer);
