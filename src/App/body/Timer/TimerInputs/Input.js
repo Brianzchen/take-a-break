@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 
-class Input extends React.Component {
-  onClick = () => {
-    this.input.select();
-  }
+import { Input as ReuseableInput } from 'components';
 
+class Input extends React.Component {
   render() {
     const styles = {
       container: {
@@ -21,16 +19,7 @@ class Input extends React.Component {
       },
       input: {
         display: 'block',
-        boxSizing: 'border-box',
         width: '100%',
-        fontSize: '16px',
-        padding: '8px',
-        borderRadius: '6px',
-        outline: 'none',
-        border: '1px solid #ccc',
-        ':focus': {
-          border: '1px solid #69b0e8',
-        },
       },
     };
 
@@ -39,13 +28,13 @@ class Input extends React.Component {
         <label style={styles.label} htmlFor={this.props.label}>
           {this.props.label}
         </label>
-        <input
-          style={styles.input}
-          ref={o => { this.input = o; }}
-          type={'number'}
+        <ReuseableInput
+          ref={o => { if (o !== null) this.input = o.input; }}
           id={this.props.label}
+          style={styles.input}
+          type={'number'}
           value={this.props.value}
-          onClick={this.onClick}
+          onClick={() => { this.input.select(); }}
           onChange={this.props.onChange}
         />
       </div>

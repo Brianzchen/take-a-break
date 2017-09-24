@@ -4,38 +4,30 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { actions } from 'reducers/youtube';
+import { Button } from 'components';
 
 const styles = {
   container: {
     verticalAlign: 'top',
     display: 'inline-block',
-    width: '10%',
-  },
-  label: {
-
   },
   counter: {
     lineHeight: '42px',
   },
   value: {
     display: 'inline-block',
+    verticalAlign: 'top',
+    lineHeight: '38px',
   },
   buttons: {
     display: 'inline-block',
-    marginLeft: '8px',
-  },
-  button: {
-    userSelect: 'none',
-    cursor: 'pointer',
-    position: 'relative',
-    top: '6px',
-    margin: 'auto 4px',
+    marginLeft: '4px',
   },
 };
 
 const RepeatField = props => (
   <div style={styles.container}>
-    <div style={styles.label}>
+    <div>
       {'Repeat'}
     </div>
     <div style={styles.counter}>
@@ -43,20 +35,14 @@ const RepeatField = props => (
         {props.repeatAmount}
       </div>
       <div style={styles.buttons}>
-        <i
-          style={styles.button}
-          className={'material-icons'}
+        <Button
+          iconName="chevron-up"
           onClick={props.actions.addOneToRepeats}
-        >
-          keyboard_arrow_up
-        </i>
-        <i
-          style={styles.button}
-          className={'material-icons'}
+        />
+        <Button
+          iconName="chevron-down"
           onClick={props.actions.minusOneToRepeats}
-        >
-          keyboard_arrow_down
-        </i>
+        />
       </div>
     </div>
   </div>

@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 
 const style = {
   margin: '4px',
   fontSize: '24px',
+  userSelect: 'none',
   cursor: 'pointer',
+  ':hover': {
+    opacity: 0.5,
+  },
 };
 
 const Button = props => (
@@ -26,4 +31,4 @@ Button.defaultProps = {
   style: {},
 };
 
-export default Button;
+export default Radium(Button);

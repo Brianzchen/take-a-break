@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 
 import getVideoId from 'lib/getVideoId';
+import { Input } from 'components';
 
 import Buttons from './Buttons';
 
@@ -55,15 +56,7 @@ class Link extends React.Component {
         boxSizing: 'border-box',
       },
       input: {
-        display: 'inline-block',
         width: '50%',
-        padding: '8px',
-        borderRadius: '6px',
-        outline: 'none',
-        border: '1px solid #ccc',
-        ':focus': {
-          border: '1px solid #69b0e8',
-        },
       },
       title: {
         display: 'inline-block',
@@ -73,9 +66,9 @@ class Link extends React.Component {
 
     return (
       <div style={styles.container}>
-        <input
+        <Input
+          id="youtubeInput"
           style={styles.input}
-          id={'youtubeInput'}
           value={this.props.value}
           onChange={e => {
             this.props.setLink(e.target.value, this.props.index);

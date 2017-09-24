@@ -21,8 +21,6 @@ const Links = props => {
     },
   };
 
-  const label = 'Youtube Link';
-
   const links = map(props.links, (o, i) => (
     <Link
       key={i}
@@ -35,7 +33,7 @@ const Links = props => {
   return (
     <div style={styles.container}>
       <div style={styles.label}>
-        {label}
+        {'Youtube Links'}
       </div>
       {links}
     </div>

@@ -39,10 +39,18 @@ export const setLink = (link, index) => (
   }
 );
 
+export const addLink = index => (
+  (dispatch, getState) => {
+    const links = getState().youtube.links;
+    links.splice(index + 1, 0, 'test');
+    console.log(links);
+    dispatch(setLinks(links));
+  }
+);
+
 export const removeLink = index => (
   (dispatch, getState) => {
     const links = getState().youtube.links;
-
     links.splice(index, 1);
 
     dispatch(setLinks(links.length === 0 ? [''] : links));

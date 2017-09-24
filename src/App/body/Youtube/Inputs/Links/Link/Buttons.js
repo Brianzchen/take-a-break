@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { actions } from 'reducers/youtube';
-import Button from 'components/Button';
+import { Button } from 'components';
 
 const style = {
   position: 'absolute',
@@ -17,6 +17,7 @@ const Buttons = props => (
     <Button
       iconName="plus"
       style={{ color: 'green' }}
+      onClick={() => { props.actions.addLink(props.index); }}
     />
     <Button
       iconName="close"
@@ -29,6 +30,7 @@ const Buttons = props => (
 Buttons.propTypes = {
   index: PropTypes.number.isRequired,
   actions: PropTypes.shape({
+    addLink: PropTypes.func.isRequired,
     removeLink: PropTypes.func.isRequired,
   }).isRequired,
 };
