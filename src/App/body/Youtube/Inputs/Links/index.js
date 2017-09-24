@@ -2,61 +2,50 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { map } from 'lodash';
 
 import { actions } from 'reducers/youtube';
 
 import Link from './Link';
 
-class Links extends React.Component {
-  constructor(props) {
-    super(props);
+const Links = props => {
+  const styles = {
+    container: {
+      display: 'inline-block',
+      width: '90%',
+    },
+    label: {
+      textAlign: 'center',
+      marginLeft: '4px',
+      marginBottom: '1px',
+    },
+  };
 
-    this.state = {
-      links: 1,
-    };
-  }
+  const label = 'Youtube Link';
 
-  render() {
-    const styles = {
-      container: {
-        display: 'inline-block',
-        width: '90%',
-      },
-      label: {
-        textAlign: 'center',
-        marginLeft: '4px',
-        marginBottom: '1px',
-      },
-    };
+  const links = map(props.links, (o, i) => (
+    <Link
+      key={i}
+      value={o}
+      setLink={props.actions.setLink}
+      index={i}
+    />
+  ));
 
-    const links = [];
-
-    for (let i = 0, len = this.state.links; i < len; i++) {
-      links.push(
-        <Link
-          key={i}
-          value={this.props.links[i]}
-          setLink={link => { this.props.actions.addLink(link, i); }}
-        />);
-    }
-
-    const label = 'Youtube Link';
-
-    return (
-      <div style={styles.container}>
-        <div style={styles.label}>
-          {label}
-        </div>
-        {links}
+  return (
+    <div style={styles.container}>
+      <div style={styles.label}>
+        {label}
       </div>
-    );
-  }
-}
+      {links}
+    </div>
+  );
+};
 
 Links.propTypes = {
   links: PropTypes.arrayOf(PropTypes.string).isRequired,
   actions: PropTypes.shape({
-    addLink: PropTypes.func.isRequired,
+    setLink: PropTypes.func.isRequired,
   }).isRequired,
 };
 

@@ -1,5 +1,5 @@
 import initialState from './initialState';
-import { SET_REPEATS, SET_LINK, SET_LINKS } from './constants';
+import { SET_REPEATS, SET_LINKS } from './constants';
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -7,10 +7,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         repeats: action.payload,
-      };
-    case SET_LINK:
-      return {
-        ...state,
       };
     case SET_LINKS:
       return {

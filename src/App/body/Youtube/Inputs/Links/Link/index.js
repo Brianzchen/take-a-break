@@ -4,6 +4,8 @@ import Radium from 'radium';
 
 import getVideoId from 'lib/getVideoId';
 
+import Buttons from './Buttons';
+
 class Link extends React.Component {
   constructor(props) {
     super(props);
@@ -44,10 +46,13 @@ class Link extends React.Component {
   render() {
     const styles = {
       container: {
+        position: 'relative',
         verticalAlign: 'top',
         textAlign: 'left',
         width: '100%',
         margin: '4px',
+        paddingRight: '67px',
+        boxSizing: 'border-box',
       },
       input: {
         display: 'inline-block',
@@ -72,12 +77,15 @@ class Link extends React.Component {
           style={styles.input}
           id={'youtubeInput'}
           value={this.props.value}
-          onChange={e => { this.props.setLink(e.target.value); }}
+          onChange={e => {
+            this.props.setLink(e.target.value, this.props.index);
+          }}
           placeholder={'Link'}
         />
         <div style={styles.title}>
           - {this.state.title}
         </div>
+        <Buttons index={this.props.index} />
       </div>
     );
   }
@@ -86,6 +94,7 @@ class Link extends React.Component {
 Link.propTypes = {
   value: PropTypes.string.isRequired,
   setLink: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 export default Radium(Link);

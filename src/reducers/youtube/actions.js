@@ -1,23 +1,10 @@
 import { clone } from 'lodash';
 
-import { SET_REPEATS, SET_LINK, SET_LINKS } from './constants';
+import { SET_REPEATS, SET_LINKS } from './constants';
 
 export const setRepeats = repeats => ({
   type: SET_REPEATS,
   payload: repeats,
-});
-
-export const setLink = (link, index) => ({
-  type: SET_LINK,
-  payload: {
-    link,
-    index,
-  },
-});
-
-export const setLinks = links => ({
-  type: SET_LINKS,
-  payload: links,
 });
 
 export const addOneToRepeats = () => (
@@ -33,7 +20,12 @@ export const minusOneToRepeats = () => (
   }
 );
 
-export const addLink = (link, index) => (
+export const setLinks = links => ({
+  type: SET_LINKS,
+  payload: links,
+});
+
+export const setLink = (link, index) => (
   (dispatch, getState) => {
     const links = clone(getState().youtube.links);
     if (typeof links[index] !== 'undefined') {
@@ -44,5 +36,15 @@ export const addLink = (link, index) => (
 
     dispatch(setLinks(links));
     localStorage.setItem('links', JSON.stringify(links));
+  }
+);
+
+export const removeLink = index => (
+  (dispatch, getState) => {
+    const links = getState().youtube.links;
+
+    links.splice(index, 1);
+
+    dispatch(setLinks(links.length === 0 ? [''] : links));
   }
 );

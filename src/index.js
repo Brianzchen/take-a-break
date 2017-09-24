@@ -4,6 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { StyleRoot } from 'radium';
+import 'mdi/css/materialdesignicons.min.css';
 
 import appReducer from 'reducers';
 import App from 'App';
