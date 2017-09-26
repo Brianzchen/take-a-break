@@ -6,6 +6,7 @@ import getVideoId from 'lib/getVideoId';
 import { Input } from 'components';
 
 import Buttons from './Buttons';
+import Title from './Title';
 
 class Link extends React.Component {
   constructor(props) {
@@ -58,10 +59,6 @@ class Link extends React.Component {
       input: {
         width: '50%',
       },
-      title: {
-        display: 'inline-block',
-        paddingLeft: '8px',
-      },
     };
 
     return (
@@ -75,9 +72,7 @@ class Link extends React.Component {
           }}
           placeholder={'Link'}
         />
-        <div style={styles.title}>
-          - {this.state.title}
-        </div>
+        <Title value={this.state.title} />
         <Buttons index={this.props.index} />
       </div>
     );
