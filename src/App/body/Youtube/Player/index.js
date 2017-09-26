@@ -4,10 +4,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { isEqual } from 'lodash';
+import { isEqual, get } from 'lodash';
 
 import { actions } from 'reducers/timer';
 import getVideoId from 'lib/getVideoId';
+
+import NowPlaying from './NowPlaying';
 
 class Player extends React.Component {
   constructor(props) {
@@ -28,7 +30,7 @@ class Player extends React.Component {
       this.player = new YT.Player('player', {
         height: '360',
         width: '640',
-        videoId: getVideoId(this.props.links[0]),
+        videoId: getVideoId(this.props.links[0].link),
         events: {
           onStateChange: event => {
             switch (event.data) {
@@ -54,20 +56,24 @@ class Player extends React.Component {
     if (!this.player) return;
 
     if (!isEqual(this.props.links, nextProps.links)) {
-      this.player.cueVideoById(getVideoId(nextProps.links[this.playlistCounter]));
+      this.player.cueVideoById(
+        getVideoId(nextProps.links[this.playlistCounter].link),
+      );
     }
 
     if (!this.props.startVideo && nextProps.startVideo) {
       this.player.playVideo();
+    } else if (this.props.startVideo && !nextProps.startVideo) {
+      this.player.pauseVideo();
     }
   }
 
   playerEnded = () => {
-    const nextVideo = this.props.links[this.playlistCounter + 1];
+    const nextVideo = get(this.props.links, '[this.playlistCounter + 1].link');
 
     if (typeof nextVideo === 'undefined' || getVideoId(nextVideo).length === 0) {
       this.playlistCounter = 0;
-      this.player.cueVideoById(getVideoId(this.props.links[this.playlistCounter]));
+      this.player.cueVideoById(getVideoId(this.props.links[this.playlistCounter].link));
 
       if (this.repeatCounter >= this.props.repeat) {
         this.repeatCounter = 0;
@@ -85,11 +91,18 @@ class Player extends React.Component {
 
   render() {
     const style = {
-      display: this.props.links[this.playlistCounter].length > 0 ? 'initial' : 'none',
+      display: this.props.links[this.playlistCounter].link.length > 0 ? 'initial' : 'none',
     };
 
     return (
       <div style={style}>
+        {this.props.startVideo ?
+          (
+            <NowPlaying
+              title={this.props.links[this.playlistCounter].title}
+            />
+          ) : null
+        }
         <div id={'player'} />
       </div>
     );
@@ -99,7 +112,10 @@ class Player extends React.Component {
 Player.propTypes = {
   startVideo: PropTypes.bool.isRequired,
   repeat: PropTypes.number.isRequired,
-  links: PropTypes.arrayOf(PropTypes.string).isRequired,
+  links: PropTypes.arrayOf(PropTypes.shape({
+    link: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  })).isRequired,
   actions: PropTypes.shape({
     startTimer: PropTypes.func.isRequired,
   }).isRequired,

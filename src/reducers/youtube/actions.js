@@ -1,6 +1,7 @@
 import { clone } from 'lodash';
 
 import { SET_REPEATS, SET_LINKS } from './constants';
+import newLink from './objects/newLink';
 
 export const setRepeats = repeats => ({
   type: SET_REPEATS,
@@ -29,9 +30,9 @@ export const setLink = (link, index) => (
   (dispatch, getState) => {
     const links = clone(getState().youtube.links);
     if (typeof links[index] !== 'undefined') {
-      links[index] = link;
+      links[index] = newLink(link);
     } else {
-      links.push(link);
+      links.push(newLink(link));
     }
 
     dispatch(setLinks(links));
@@ -39,10 +40,19 @@ export const setLink = (link, index) => (
   }
 );
 
+export const setLinkTitle = (title, index) => (
+  (dispatch, getState) => {
+    const links = clone(getState().youtube.links);
+    links[index].title = title;
+
+    dispatch(setLinks(links));
+  }
+);
+
 export const addLink = index => (
   (dispatch, getState) => {
     const links = clone(getState().youtube.links);
-    links.splice(index + 1, 0, '');
+    links.splice(index + 1, 0, newLink());
 
     dispatch(setLinks(links));
     localStorage.setItem('links', JSON.stringify(links));
@@ -54,7 +64,7 @@ export const removeLink = index => (
     const links = clone(getState().youtube.links);
     links.splice(index, 1);
 
-    dispatch(setLinks(links.length === 0 ? [''] : links));
+    dispatch(setLinks(links.length === 0 ? [newLink()] : links));
     localStorage.setItem('links', JSON.stringify(links.length === 0 ? [''] : links));
   }
 );

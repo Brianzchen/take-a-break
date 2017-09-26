@@ -24,8 +24,10 @@ const Links = props => {
   const links = map(props.links, (o, i) => (
     <Link
       key={i}
-      value={o}
+      link={o.link}
+      title={o.title}
       setLink={props.actions.setLink}
+      setLinkTitle={props.actions.setLinkTitle}
       index={i}
     />
   ));
@@ -41,9 +43,13 @@ const Links = props => {
 };
 
 Links.propTypes = {
-  links: PropTypes.arrayOf(PropTypes.string).isRequired,
+  links: PropTypes.arrayOf(PropTypes.shape({
+    link: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  })).isRequired,
   actions: PropTypes.shape({
     setLink: PropTypes.func.isRequired,
+    setLinkTitle: PropTypes.func.isRequired,
   }).isRequired,
 };
 

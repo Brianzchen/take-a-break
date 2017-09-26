@@ -16,19 +16,17 @@ class Link extends React.Component {
       title: '',
     };
 
-    const linkId = getVideoId(props.value);
+    const linkId = getVideoId(props.link);
     if (linkId.length !== 0) this.setVideoName(linkId);
   }
 
   componentWillReceiveProps(nextProps) {
-    const linkId = getVideoId(nextProps.value);
+    const linkId = getVideoId(nextProps.link);
 
     if (linkId.length > 0) {
-      if (this.props.value !== nextProps.value) {
+      if (this.props.link !== nextProps.link) {
         this.setVideoName(linkId);
       }
-    } else {
-      this.setState({ title: '' });
     }
   }
 
@@ -38,9 +36,10 @@ class Link extends React.Component {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', query);
     xhr.onload = () => {
-      this.setState({
-        title: JSON.parse(xhr.response).items[0].snippet.title,
-      });
+      this.props.setLinkTitle(
+        JSON.parse(xhr.response).items[0].snippet.title,
+        this.props.index,
+      );
     };
     xhr.send();
   }
@@ -66,13 +65,13 @@ class Link extends React.Component {
         <Input
           id="youtubeInput"
           style={styles.input}
-          value={this.props.value}
+          value={this.props.link}
           onChange={e => {
             this.props.setLink(e.target.value, this.props.index);
           }}
           placeholder={'Link'}
         />
-        <Title value={this.state.title} />
+        <Title value={this.props.title} />
         <Buttons index={this.props.index} />
       </div>
     );
@@ -80,8 +79,10 @@ class Link extends React.Component {
 }
 
 Link.propTypes = {
-  value: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   setLink: PropTypes.func.isRequired,
+  setLinkTitle: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
 };
 
