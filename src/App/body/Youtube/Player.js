@@ -63,8 +63,11 @@ class Player extends React.Component {
   }
 
   playerEnded = () => {
-    if (typeof this.props.links[this.playlistCounter + 1] === 'undefined') {
+    const nextVideo = this.props.links[this.playlistCounter + 1];
+
+    if (typeof nextVideo === 'undefined' || getVideoId(nextVideo).length === 0) {
       this.playlistCounter = 0;
+      this.player.cueVideoById(getVideoId(this.props.links[this.playlistCounter]));
 
       if (this.repeatCounter >= this.props.repeat) {
         this.repeatCounter = 0;
@@ -75,7 +78,7 @@ class Player extends React.Component {
       }
     } else {
       this.playlistCounter += 1;
-      this.player.cueVideoById(this.props.links[this.playlistCounter]);
+      this.player.cueVideoById(getVideoId(nextVideo));
       this.player.playVideo();
     }
   }
