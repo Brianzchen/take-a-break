@@ -55,7 +55,10 @@ class Player extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!this.player) return;
 
-    if (!isEqual(this.props.links, nextProps.links)) {
+    if (!isEqual(
+      this.props.links[this.playlistCounter],
+      nextProps.links[this.playlistCounter],
+    )) {
       this.player.cueVideoById(
         getVideoId(nextProps.links[this.playlistCounter].link),
       );
