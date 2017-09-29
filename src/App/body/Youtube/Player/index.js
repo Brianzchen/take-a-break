@@ -126,7 +126,7 @@ Player.propTypes = {
 
 const mapStateToProps = state => ({
   startVideo: state.timer.timerOn && state.timer.currentTimeLeft <= 0,
-  repeat: state.youtube.repeats,
+  repeat: state.youtube.repeat,
   links: state.youtube.links,
 });
 

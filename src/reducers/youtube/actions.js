@@ -1,28 +1,18 @@
 import { clone } from 'lodash';
 
-import { SET_REPEATS, SET_LINKS } from './constants';
+import * as constants from './constants';
 import newLink from './objects/newLink';
 
-export const setRepeats = repeats => ({
-  type: SET_REPEATS,
-  payload: repeats,
+export const addOneToRepeat = () => ({
+  type: constants.ADD_ONE_TO_REPEAT,
 });
 
-export const addOneToRepeats = () => (
-  (dispatch, getState) => {
-    dispatch(setRepeats(getState().youtube.repeats + 1));
-  }
-);
-
-export const minusOneToRepeats = () => (
-  (dispatch, getState) => {
-    const repeats = getState().youtube.repeats;
-    if (repeats > 0) dispatch(setRepeats(repeats - 1));
-  }
-);
+export const minusOneToRepeat = () => ({
+  type: constants.MINUS_ONE_TO_REPEAT,
+});
 
 export const setLinks = links => ({
-  type: SET_LINKS,
+  type: constants.SET_LINKS,
   payload: links,
 });
 

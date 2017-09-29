@@ -1,14 +1,23 @@
 import initialState from './initialState';
-import { SET_REPEATS, SET_LINKS } from './constants';
+import * as constants from './constants';
 
 export default (state = initialState, action) => {
+  const canMinusRepeat = state.repeat > 0;
+
   switch (action.type) {
-    case SET_REPEATS:
+    case constants.ADD_ONE_TO_REPEAT:
+      localStorage.setItem('repeat', state.repeat + 1);
       return {
         ...state,
-        repeats: action.payload,
+        repeat: state.repeat + 1,
       };
-    case SET_LINKS:
+    case constants.MINUS_ONE_TO_REPEAT:
+      canMinusRepeat && localStorage.setItem('repeat', state.repeat - 1);
+      return {
+        ...state,
+        repeat: canMinusRepeat ? state.repeat - 1 : state.repeat,
+      };
+    case constants.SET_LINKS:
       return {
         ...state,
         links: action.payload,
