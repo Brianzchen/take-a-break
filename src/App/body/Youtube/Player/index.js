@@ -15,8 +15,11 @@ class Player extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      playlistCounter: 0,
+    };
+
     this.repeatCounter = 0;
-    this.playlistCounter = 0;
   }
 
   componentDidMount() {
@@ -56,11 +59,11 @@ class Player extends React.Component {
     if (!this.player) return;
 
     if (!isEqual(
-      this.props.links[this.playlistCounter],
-      nextProps.links[this.playlistCounter],
+      this.props.links[this.state.playlistCounter],
+      nextProps.links[this.state.playlistCounter],
     )) {
       this.player.cueVideoById(
-        getVideoId(nextProps.links[this.playlistCounter].link),
+        getVideoId(nextProps.links[this.state.playlistCounter].link),
       );
     }
 
@@ -72,11 +75,11 @@ class Player extends React.Component {
   }
 
   playerEnded = () => {
-    const nextVideo = get(this.props.links, '[this.playlistCounter + 1].link');
+    const nextVideo = get(this.props.links, `[${this.state.playlistCounter + 1}].link`);
 
     if (typeof nextVideo === 'undefined' || getVideoId(nextVideo).length === 0) {
-      this.playlistCounter = 0;
-      this.player.cueVideoById(getVideoId(this.props.links[this.playlistCounter].link));
+      this.setState({ playlistCounter: 0 });
+      this.player.cueVideoById(getVideoId(this.props.links[this.state.playlistCounter].link));
 
       if (this.repeatCounter >= this.props.repeat) {
         this.repeatCounter = 0;
@@ -86,7 +89,7 @@ class Player extends React.Component {
         this.repeatCounter += 1;
       }
     } else {
-      this.playlistCounter += 1;
+      this.setState({ playlistCounter: this.state.playlistCounter + 1 });
       this.player.cueVideoById(getVideoId(nextVideo));
       this.player.playVideo();
     }
@@ -94,18 +97,15 @@ class Player extends React.Component {
 
   render() {
     const style = {
-      display: this.props.links[this.playlistCounter].link.length > 0 ? 'initial' : 'none',
+      display: this.props.links[this.state.playlistCounter].link.length > 0 ? 'initial' : 'none',
     };
 
     return (
       <div style={style}>
-        {this.props.startVideo ?
-          (
-            <NowPlaying
-              title={this.props.links[this.playlistCounter].title}
-            />
-          ) : null
-        }
+        <NowPlaying
+          title={this.props.links[this.state.playlistCounter].title}
+          show={this.props.startVideo}
+        />
         <div id={'player'} />
       </div>
     );

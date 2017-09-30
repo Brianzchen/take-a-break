@@ -49,11 +49,7 @@ export default (state = initialState, action) => {
       const { link, index } = action.payload;
 
       const links = clone(state.links);
-      if (typeof links[link] !== 'undefined') {
-        links[index] = newLink(link);
-      } else {
-        links.push(newLink(link));
-      }
+      links[index].link = link;
 
       localStorage.setItem('links', JSON.stringify(links));
 
