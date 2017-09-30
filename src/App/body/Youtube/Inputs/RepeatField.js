@@ -37,11 +37,11 @@ const RepeatField = props => (
       <div style={styles.buttons}>
         <Button
           iconName="chevron-up"
-          onClick={props.actions.addOneToRepeats}
+          onClick={props.actions.addOneToRepeat}
         />
         <Button
           iconName="chevron-down"
-          onClick={props.actions.minusOneToRepeats}
+          onClick={props.actions.minusOneToRepeat}
         />
       </div>
     </div>
@@ -51,13 +51,13 @@ const RepeatField = props => (
 RepeatField.propTypes = {
   repeatAmount: PropTypes.number.isRequired,
   actions: PropTypes.shape({
-    addOneToRepeats: PropTypes.func.isRequired,
-    minusOneToRepeats: PropTypes.func.isRequired,
+    addOneToRepeat: PropTypes.func.isRequired,
+    minusOneToRepeat: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 const mapStateToProps = state => ({
-  repeatAmount: state.youtube.repeats,
+  repeatAmount: state.youtube.repeat,
 });
 
 const mapDispatchToProps = dispatch => ({
